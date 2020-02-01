@@ -1,11 +1,3 @@
-/**
- * @file mainpage.h
- *
- */
-
-/*! \mainpage Panglei Xu, xu000144@umn.edu
- *
- *
  # Documentation of Campus Transit Simulator System
 
  <hr>
@@ -376,7 +368,8 @@ To do that:
       2. put in your Email address  in the Email textbox:
       3. put in your password in the Password textbox: Make sure it's at least
       15 characters OR at least 8 characters including a number and a lowercase
-      letter. ![P1: GitHub sign up page with example input](./docs/doxy_images/sign_up.png)
+      letter. 
+![P1: GitHub sign up page with example input](./docs/doxy_images/sign_up.png)
 
     3. After filling in all the textboxes, click the green button to submit your
     information.
@@ -385,14 +378,14 @@ To do that:
     after submitting, congratulations, you now have a GitHub account.
     > Note that the example page below might be slightly different from what
     > you have.
-    ![P2: GitHub example main page](./docs/doxy_images/github_main.png)
+![P2: GitHub example main page](./docs/doxy_images/github_main.png)
 
     5. If you are not redirected to the GitHub main page that is similar above
     after submitting, don't worry, simply click on the sign-in button right
     above the sign-up box. Put in your username and password you just created
     after being redirected to the sign-in page like below:
 
-    ![P3: GitHub sign-in page](./docs/doxy_images/sign_in.png)
+![P3: GitHub sign-in page](./docs/doxy_images/sign_in.png)
 
 
    6. Getting the Project Repository to customize input value
@@ -419,7 +412,7 @@ To do that:
     2. You will then see the repository page below. Click on the green
     "clone or download" button, then click Download ZIP button at bottom of
     the pop-up window.
-    ![P4: Download button](./docs/doxy_images/download_1.png)
+![P4: Download button](./docs/doxy_images/download_1.png)
 
     3. Save the ZIP file to Desktop.
 
@@ -431,10 +424,10 @@ To do that:
   #### Launching Terminal and Changing Directory
     1. Hit the Win button on your keyboard or click the Apps icon at the
     bottom left of the screen to get to the launchpad.
-    ![P5: Win Key](./docs/doxy_images/win_key.png)
+![P5: Win Key](./docs/doxy_images/win_key.png)
     2. Type the keyword "Terminal" (without quote signs) into the search box at
     the top of the launchpad screen, then hit enter on your keyboard.
-    ![P6: Search Terminal](./docs/doxy_images/terminal.png)
+![P6: Search Terminal](./docs/doxy_images/terminal.png)
     3. Once the Terminal pops up, type in the command below then hit enter
     to change your current directory to the project directory:
     >
