@@ -1,0 +1,5 @@
+Name: Panda
+Destination: 5
+Total Wait: 21
+	Wait at Stop: 10
+	Time on bus: 11

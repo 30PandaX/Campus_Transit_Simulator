@@ -8,6 +8,8 @@
 #define SRC_RANDOM_PASSENGER_GENERATOR_H_
 
 #include <list>
+#include <random>
+#include <ctime>
 
 #include "src/passenger_generator.h"
 #include "src/stop.h"
@@ -18,6 +20,9 @@ class RandomPassengerGenerator : public PassengerGenerator{
  public:
   RandomPassengerGenerator(std::list<double>, std::list<Stop *>);
   int GeneratePassengers() override;
+
+ private:
+  static std:: minstd_rand0 my_rand;
 };
 
 #endif  // SRC_RANDOM_PASSENGER_GENERATOR_H_

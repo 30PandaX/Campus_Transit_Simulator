@@ -74,7 +74,7 @@ OBJFILES = $(notdir $(patsubst %.cpp,%.o,$(patsubst %.cc,%.o,$(PROJSRCFILES)))) 
 
 
 # Add -Idirname to add directories to the compiler search path for finding .h files
-INCLUDEDIRS = -I$(CS3081DIR)/include -I$(PROJROOTDIR) -I$(TESTSRCDIR) -isystem$(CS3081DIR)/include 
+INCLUDEDIRS = -I$(CS3081DIR)/include -I$(PROJROOTDIR) -I$(TESTSRCDIR) -isystem$(CS3081DIR)/include
 
 # Add -Ldirname to add directories to the linker search path for finding libraries
 LIBDIRS = -L$(CS3081DIR)/lib

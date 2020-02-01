@@ -1,0 +1,10 @@
+build
+*.o
+*.exe
+*.out
+._*
+._DS*
+./docs/html/*
+./docs/latex/*
+*.pvt
+.DS_*

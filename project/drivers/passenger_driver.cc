@@ -14,7 +14,7 @@ int main() {
   passengers.push_back(new Passenger(23, "Jayne"));
 
   
-  int time = 0;
+  int time = 1;
   
   while (time < 60) {
     
@@ -27,29 +27,14 @@ int main() {
     //std::cout << "/*         */" << std::endl;
     std::cout << "/***********/" << std::endl;
     
-    if (time == 2) {
-      passengers[0]->GetOnBus();
-    }
-    else if (time == 5) {
-      passengers[1]->GetOnBus();
-    }
-    else if (time == 8) {
-      passengers[2]->GetOnBus();
-    }
-    else if (time == 9) {
-      passengers[3]->GetOnBus();
-    }
-    else if (time == 11) {
-      passengers[4]->GetOnBus();
-    }
-    
     for(std::vector<Passenger *>::iterator it = passengers.begin(); it != passengers.end(); it++) {
       if ((*it)->GetDestination() != time) {
         (*it)->Update();
       }
       else {
         Passenger * departing_passenger = *it;
-        departing_passenger->Report();
+        (*it)->GetOnBus();
+        departing_passenger->Report(std::cout);
         
         //When removing the passenger, the iterator gets incremented to the next element.
         //We need to push it back so that the for loop increment places the iterator at

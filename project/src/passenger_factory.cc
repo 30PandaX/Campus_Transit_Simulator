@@ -3,14 +3,16 @@
  *
  * @copyright 2019 3081 Staff, All rights reserved.
  */
-
-/*******************************************************************************
-* Includes
-******************************************************************************/
 #include <random>
 #include <string>
-
 #include "src/passenger_factory.h"
+
+/*
+ * if CONSPASS is defined, every passenger will have the same name and desination
+ * which may be helpful for regression testing!
+ *
+ */
+// #define CONSTPASS 1
 
 
 std::random_device dev;
@@ -57,19 +59,34 @@ static const char* NameStemsArray[20] = {
 Passenger * PassengerFactory::Generate(int curr_stop, int last_stop) {
   std::string new_name = NameGeneration();
 
-  //  common use of random integer generation to determine
+  // common use of random integer generation to determine
   //  what stop the passenger will depart the bus
 
+#ifndef CONSTPASS
   int destination = (dist(e) % (last_stop - curr_stop)) + curr_stop + 1;
+#endif
+
+#ifdef CONSTPASS
+  int destination = last_stop;
+#endif
 
   return new Passenger(destination, new_name);
 }
 
 std::string PassengerFactory::NameGeneration() {
   // assume rand is seeded
-  std::string name = std::string(NamePrefixArray[(dist(e) % 7)])
-  + std::string(NameStemsArray[(dist(e) % 20)])
-  + std::string(NameSuffixArray[(dist(e) % 16)]);
+#ifndef CONSTPASS
+  std::string name = std::string(NamePrefixArray[(dist(e) % 7)]) +
+                     std::string(NameStemsArray[(dist(e) % 20)]) +
+                     std::string(NameSuffixArray[(dist(e) % 16)]);
+#endif
+
+#ifdef CONSTPASS
+  std::string name = std::string(NamePrefixArray[4]) +
+                     std::string(NameStemsArray[7]) +
+                     std::string(NameSuffixArray[9]);
+#endif
+
   name[0] = toupper(name[0]);  // don't forget to capitalize!
   return name;
 }

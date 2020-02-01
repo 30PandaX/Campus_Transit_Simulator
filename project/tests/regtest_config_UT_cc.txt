@@ -1,0 +1,295 @@
+/* STUDENTS: YOU MUST ADD YOUR PASSENGER UNIT TESTS TO THIS FILE. FORMAT YOUR
+ * TESTS TO FIT THE SPECIFICATIONS GIVEN BY THE TESTS PROVIDED IN THIS FILE.
+ *
+ * Please note, the assessment tests for grading, will use the same include
+ * files, class names, and function names for accessing students' code that you
+ * find in this file.  So students, if you write your code so that it passes
+ * these feedback tests, you can be assured that the auto-grader will at least
+ * be able to properly link with your code.
+ */
+
+/*******************************************************************************
+ * Includes
+ ******************************************************************************/
+ #include <gtest/gtest.h>
+ #include <fstream>
+
+ #include "../src/route.h"
+ #include "../src/passenger.h"
+ #include "../src/stop.h"
+ #include "../src/bus.h"
+ #include "../src/rtest_passenger_generator.h"
+ #include "../src/rtest_configuration_simulator.h"
+
+
+/******************************************************
+* TEST FEATURE SetUp
+*******************************************************/
+
+class RtestConfigTests : public ::testing::Test {
+
+	protected:
+
+    int argc;
+    static const int max_reg = 12;
+    const char ** argv;
+    RtestConfigManager* configM;
+    RtestConfigManager** configM_arr = new RtestConfigManager*[max_reg];
+
+    RtestConfigurationSimulator* config_sim;
+    RtestConfigurationSimulator** config_sim_arr = new RtestConfigurationSimulator*[max_reg];
+
+
+
+	virtual void SetUp() {
+    argc = 0;
+    argv = new const char*[argc];
+    argv[0] = "./build/bin/rtest_config_sim";
+    configM = new RtestConfigManager();
+    configM->ReadConfig("../../config/config.txt");
+    config_sim = new RtestConfigurationSimulator(configM, argc, argv);
+    for (int i=0; i<max_reg; i++){
+      config_sim_arr[i] = new RtestConfigurationSimulator(configM, argc, argv);
+      configM_arr[i] = new RtestConfigManager();
+    }
+  }
+
+  virtual void TearDown() {
+    	delete configM;
+      delete config_sim;
+      for (int i=0; i<max_reg; i++){
+        delete config_sim_arr[i];
+      }
+      delete [] config_sim_arr;
+      for (int i=0; i<max_reg; i++){
+        delete configM_arr[i];
+      }
+      delete [] configM_arr;
+    }
+
+
+};
+
+
+/*******************************************************************************
+ * Test Cases
+ ******************************************************************************/
+
+TEST_F(RtestConfigTests, Constructor) {
+  std::string output = std::to_string(config_sim->ArgsChecker());
+  std::string expected = std::to_string(0);
+  EXPECT_EQ(output, expected); //default success
+};
+
+TEST_F(RtestConfigTests, SuccessFileName) {
+  argc = 2;
+  argv = new const char*[argc];
+  argv[1] = "config.txt";
+  config_sim = new RtestConfigurationSimulator(configM, argc, argv);
+
+  std::string output = std::to_string(config_sim->ArgsChecker());
+  std::string expected = std::to_string(0);
+  EXPECT_EQ(output, expected); //default success
+};
+
+TEST_F(RtestConfigTests, WrongFileName) {
+  argc = 2;
+  argv = new const char*[argc];
+  argv[1] = "dlufsafjld";
+  config_sim = new RtestConfigurationSimulator(configM, argc, argv);
+
+  std::string output = std::to_string(config_sim->ArgsChecker());
+  std::string expected = std::to_string(4);
+  EXPECT_EQ(output, expected); // wrong filename
+};
+
+TEST_F(RtestConfigTests, SuccessRounds) {
+  argc = 3;
+  argv = new const char*[argc];
+  argv[1] = "config.txt";
+  argv[2] = "10";
+
+  config_sim = new RtestConfigurationSimulator(configM, argc, argv);
+
+  std::string output = std::to_string(config_sim->ArgsChecker());
+  std::string expected = std::to_string(0);
+  EXPECT_EQ(output, expected);
+};
+
+TEST_F(RtestConfigTests, SuccessTiming) {
+  argc = 4;
+  argv = new const char*[argc];
+  argv[1] = "config.txt";
+  argv[2] = "10";
+  argv[3] = "100";
+
+  config_sim = new RtestConfigurationSimulator(configM, argc, argv);
+
+  std::string output = std::to_string(config_sim->ArgsChecker());
+  std::string expected = std::to_string(0);
+  EXPECT_EQ(output, expected);
+};
+
+
+TEST_F(RtestConfigTests, DefaultRtest) {
+
+  std::vector<int> busStartTimings_;
+  busStartTimings_.push_back(10);
+
+  for (int i=0; i<2; i++) {
+    configM_arr[i]->ReadConfig("../../config/config.txt");
+    config_sim_arr[i] = new RtestConfigurationSimulator(configM_arr[i], argc, argv);
+  }
+
+  testing::internal::CaptureStdout();
+  config_sim_arr[0]->Start(busStartTimings_);
+  config_sim_arr[0]->Update();
+  std::string output = testing::internal::GetCapturedStdout();
+
+  testing::internal::CaptureStdout();
+  config_sim_arr[1]->Start(busStartTimings_);
+  config_sim_arr[1]->Update();
+  std::string expected = testing::internal::GetCapturedStdout();
+  EXPECT_EQ(output, output); //default success
+};
+
+TEST_F(RtestConfigTests, SelfDefRtest) {
+  argc = 4;
+  argv = new const char*[argc];
+  argv[1] = "config.txt";
+  argv[2] = "10";
+  argv[3] = "100";
+
+  std::vector<int> busStartTimings_;
+  busStartTimings_.push_back(std::stoi(argv[3]));
+
+  for (int i=0; i<2; i++) {
+    configM_arr[i]->ReadConfig("../../config/config.txt");
+    config_sim_arr[i] = new RtestConfigurationSimulator(configM_arr[i], argc, argv);
+  }
+
+  testing::internal::CaptureStdout();
+  config_sim_arr[0]->Start(busStartTimings_);
+  config_sim_arr[0]->Update();
+  std::string output = testing::internal::GetCapturedStdout();
+
+  testing::internal::CaptureStdout();
+  config_sim_arr[1]->Start(busStartTimings_);
+  config_sim_arr[1]->Update();
+  std::string expected = testing::internal::GetCapturedStdout();
+  EXPECT_EQ(output, expected); //default success
+};
+
+TEST_F(RtestConfigTests, PressureRtest) {
+  argc = 4;
+  argv = new const char*[argc];
+  argv[1] = "config.txt";
+  argv[2] = "10";
+  argv[3] = "10";
+
+  std::vector<int> busStartTimings_;
+  busStartTimings_.push_back(std::stoi(argv[3]));
+  int reg_time = 6;
+  int round = 50;
+
+  for (int i=0; i<reg_time; i++) {
+    configM_arr[i]->ReadConfig("../../config/config.txt");
+    config_sim_arr[i] = new RtestConfigurationSimulator(configM_arr[i], argc, argv);
+  }
+
+  std::string output;
+  for (int i=0; i<reg_time/2; i++) {
+    testing::internal::CaptureStdout();
+    config_sim_arr[i]->Start(busStartTimings_);
+    for (int j=0; j<round; j++)
+      config_sim_arr[i]->Update();
+    output = output+testing::internal::GetCapturedStdout();
+  }
+
+  std::string expected;
+  for (int i=reg_time/2; i<reg_time; i++) {
+    testing::internal::CaptureStdout();
+    config_sim_arr[i]->Start(busStartTimings_);
+    for (int j=0; j<round; j++)
+      config_sim_arr[i]->Update();
+    expected = expected+testing::internal::GetCapturedStdout();
+  }
+
+  EXPECT_EQ(output, expected); //default success
+};
+
+TEST_F(RtestConfigTests, MaxPressureRtest) {
+  argc = 4;
+  argv = new const char*[argc];
+  argv[1] = "config.txt";
+  argv[2] = "10";
+  argv[3] = "10";
+
+  std::vector<int> busStartTimings_;
+  busStartTimings_.push_back(std::stoi(argv[3]));
+  int reg_time = max_reg;
+  int round = 50;
+
+  for (int i=0; i<reg_time; i++) {
+    configM_arr[i]->ReadConfig("../../config/config.txt");
+    config_sim_arr[i] = new RtestConfigurationSimulator(configM_arr[i], argc, argv);
+  }
+
+  std::string output;
+  for (int i=0; i<reg_time/2; i++) {
+    testing::internal::CaptureStdout();
+    config_sim_arr[i]->Start(busStartTimings_);
+    for (int j=0; j<round; j++)
+      config_sim_arr[i]->Update();
+    output = output+testing::internal::GetCapturedStdout();
+  }
+
+  std::string expected;
+  for (int i=reg_time/2; i<reg_time; i++) {
+    testing::internal::CaptureStdout();
+    config_sim_arr[i]->Start(busStartTimings_);
+    for (int j=0; j<round; j++)
+      config_sim_arr[i]->Update();
+    expected = expected+testing::internal::GetCapturedStdout();
+  }
+
+  EXPECT_EQ(output, expected); //default success
+};
+
+TEST_F(RtestConfigTests, FileRtest) {
+  argc = 4;
+  argv = new const char*[argc];
+  argv[1] = "config.txt";
+  argv[2] = "10";
+  argv[3] = "10";
+
+  std::vector<int> busStartTimings_;
+  busStartTimings_.push_back(std::stoi(argv[3]));
+  int reg_time = 2;
+  int round = 50;
+
+  for (int i=0; i<reg_time; i++) {
+    configM_arr[i]->ReadConfig("../../config/expr_config.txt");
+    config_sim_arr[i] = new RtestConfigurationSimulator(configM_arr[i], argc, argv);
+  }
+
+  std::string output;
+  for (int i=0; i<reg_time/2; i++) {
+    testing::internal::CaptureStdout();
+    config_sim_arr[i]->Start(busStartTimings_);
+    for (int j=0; j<round; j++)
+      config_sim_arr[i]->Update();
+    output = output+testing::internal::GetCapturedStdout();
+  }
+
+  std::string expected;
+  for (int i=reg_time/2; i<reg_time; i++) {
+    testing::internal::CaptureStdout();
+    config_sim_arr[i]->Start(busStartTimings_);
+    for (int j=0; j<round; j++)
+      config_sim_arr[i]->Update();
+    expected = expected+testing::internal::GetCapturedStdout();
+  }
+
+  EXPECT_EQ(output, expected); //default success
+};

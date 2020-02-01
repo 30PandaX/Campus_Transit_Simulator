@@ -21,8 +21,10 @@ class PassengerGenerator {
  protected:
   std::list<double> generation_probabilities_;
   std::list<Stop *> stops_;
+  std::ostream *out_ = &std::cout;
+
 
   // should we be using a singleton here somehow?
-  PassengerFactory * pass_factory;
+  // PassengerFactory * pass_factory;
 };
 #endif  // SRC_PASSENGER_GENERATOR_H_
